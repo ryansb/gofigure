@@ -1,0 +1,7 @@
+- hosts: gofigure
+  tasks:
+    - name: install mongodb repo
+      copy: dest="/etc/yum.repos.d/mongodb.repo" src="./mongodb.repo" owner=root group=root
+    - yum: pkg=mongo-10gen-server state=latest
+    - yum: pkg=mongo-10gen state=latest
+    - command: systemctl restart mongod
