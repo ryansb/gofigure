@@ -1,7 +1,8 @@
 - hosts: gofigure
   tasks:
-    - name: install mongodb repo
-      copy: dest="/etc/yum.repos.d/mongodb.repo" src="./mongodb.repo" owner=root group=root
-    - yum: pkg=mongo-10gen-server state=latest
-    - yum: pkg=mongo-10gen state=latest
+    - yum: pkg=mongodb-server state=latest
+    - yum: pkg=mongodb state=latest
+    - command: systemctl stop firewalld
+    - command: systemctl disable firewalld
     - command: systemctl restart mongod
+    - command: systemctl enable mongod
