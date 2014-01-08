@@ -24,7 +24,7 @@ func main() {
 	//defer closer()
 	//c.Insert(bson.M{"Port": 1235, "DBName": "gofigure"})
 
-	//	gofigure.MongoHosts = "172.16.0.101"
+	gofigure.MongoHosts = "172.16.0.101"
 
 	err := gofigure.Process("default", s)
 	if err != nil {
