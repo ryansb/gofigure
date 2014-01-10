@@ -4,5 +4,6 @@
     - yum: pkg=mongodb state=latest
     - command: systemctl stop firewalld
     - command: systemctl disable firewalld
+    - copy: src=mongodb.conf dest=/etc/mongodb.conf owner=root group=root mode=0644
     - command: systemctl restart mongod
     - command: systemctl enable mongod
