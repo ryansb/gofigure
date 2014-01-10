@@ -18,9 +18,10 @@ func Test(t *testing.T) {
 }
 
 type MyAppSpec struct {
-	Env   string
-	Port  int
-	Debug bool
+	Env          string
+	Port         int
+	Debug        bool
+	AlarmLoadPct float32
 }
 
 const testMongoHost = "172.16.0.101"
@@ -49,16 +50,17 @@ func resetDB(c *C) {
 	}
 }
 
-func (s *BasicS) TestMongoConfig(c *C) {
+func setupMongoTest(c *C) {
 	resetDB(c)
 	session := connectMongo(c)
 	defer session.Close()
 	coll := session.DB("gofigure").C("default")
 
 	err := coll.Insert(bson.M{
-		"Port":  1234,
-		"Env":   "test",
-		"Debug": true,
+		"Port":         1234,
+		"AlarmLoadPct": 0.9,
+		"Env":          "test",
+		"Debug":        true,
 	})
 	if err != nil {
 		c.Errorf("Failed to insert basic config. %s", err.Error())
@@ -72,13 +74,43 @@ func (s *BasicS) TestMongoConfig(c *C) {
 	c.Check(i["Port"], Equals, 1234)
 	c.Check(i["Env"], Equals, "test")
 	c.Check(i["Debug"], Equals, true)
+	c.Check(i["AlarmLoadPct"], Equals, 0.9)
 
 	gofigure.MongoHosts = testMongoHost
+}
+
+func (s *BasicS) TestMongoString(c *C) {
+	setupMongoTest(c)
 
 	conf := MyAppSpec{}
-	err = gofigure.Process("default", &conf)
+	err := gofigure.Process("default", &conf)
+	c.Check(err, Equals, nil)
+	c.Check(conf.Env, Equals, "test")
+}
+
+func (s *BasicS) TestMongoBool(c *C) {
+	setupMongoTest(c)
+
+	conf := MyAppSpec{}
+	err := gofigure.Process("default", &conf)
 	c.Check(err, Equals, nil)
 	c.Check(conf.Debug, Equals, true)
+}
+
+func (s *BasicS) TestMongoFloat(c *C) {
+	setupMongoTest(c)
+
+	conf := MyAppSpec{}
+	err := gofigure.Process("default", &conf)
+	c.Check(err, Equals, nil)
+	c.Check(conf.AlarmLoadPct, Equals, float32(0.9))
+}
+
+func (s *BasicS) TestMongoInt(c *C) {
+	setupMongoTest(c)
+
+	conf := MyAppSpec{}
+	err := gofigure.Process("default", &conf)
+	c.Check(err, Equals, nil)
 	c.Check(conf.Port, Equals, 1234)
-	c.Check(conf.Env, Equals, "test")
 }

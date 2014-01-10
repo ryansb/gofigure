@@ -1,7 +1,6 @@
 package gofigure
 
 import (
-	"fmt"
 	"labix.org/v2/mgo"
 	"labix.org/v2/mgo/bson"
 )
@@ -15,7 +14,6 @@ func Process(collection string, spec interface{}) error {
 
 	res := map[string]interface{}{}
 	err := c.Find(bson.M{}).One(&res)
-	fmt.Println(res)
 
 	mergeMapAndStruct(res, spec)
 

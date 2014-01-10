@@ -6,7 +6,6 @@ import (
 )
 
 func mergeMapAndStruct(theMap map[string]interface{}, spec interface{}) error {
-	fmt.Println("mergin'")
 	s := reflect.ValueOf(spec).Elem()
 	if s.Kind() != reflect.Struct {
 		return fmt.Errorf("Invalid spec! Needs to be a struct.")
@@ -26,6 +25,13 @@ func mergeMapAndStruct(theMap map[string]interface{}, spec interface{}) error {
 				f.SetString(value.(string))
 			case reflect.Bool:
 				f.SetBool(value.(bool))
+			case reflect.Float32, reflect.Float64:
+				switch value.(type) {
+				case float32:
+					f.SetFloat(float64(value.(float32)))
+				case float64:
+					f.SetFloat(value.(float64))
+				}
 			case reflect.Int:
 				switch value.(type) {
 				case int:
