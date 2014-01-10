@@ -17,7 +17,7 @@ func mergeMapAndStruct(theMap map[string]interface{}, spec interface{}) error {
 			fieldName := typeOfSpec.Field(i).Name
 			value, ok := theMap[fieldName]
 			if !ok {
-				fmt.Println("Field %s not found in %s", fieldName, spec)
+				// the value isn't in the map. Skip dat.
 				continue
 			}
 			switch f.Kind() {
@@ -32,7 +32,7 @@ func mergeMapAndStruct(theMap map[string]interface{}, spec interface{}) error {
 				case float64:
 					f.SetFloat(value.(float64))
 				}
-			case reflect.Int:
+			case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
 				switch value.(type) {
 				case int:
 					f.SetInt(int64(value.(int)))
@@ -43,7 +43,7 @@ func mergeMapAndStruct(theMap map[string]interface{}, spec interface{}) error {
 				case int64:
 					f.SetInt(value.(int64))
 				default:
-					panic("Non-int!")
+					panic("This should never happen. A non-int has been detected as an int by 'reflect'")
 				}
 			}
 		}
