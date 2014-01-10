@@ -13,8 +13,8 @@ Vagrant.configure("2") do |config|
     config.vm.network :private_network, ip: "172.16.0.101"
     config.vm.provider :virtualbox do |vb|
         vb.gui = false
-        vb.customize ["modifyvm", :id, "--memory", "1500"]
-        vb.customize ["modifyvm", :id, "--cpus", "3"]
+        vb.customize ["modifyvm", :id, "--memory", "600"]
+        vb.customize ["modifyvm", :id, "--cpus", "2"]
         # This allows symlinks to be created within the /vagrant root directory
         vb.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root", "1"]
     end
