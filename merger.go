@@ -31,6 +31,8 @@ func mergeMapAndStruct(theMap map[string]interface{}, spec interface{}) error {
 					f.SetFloat(float64(value.(float32)))
 				case float64:
 					f.SetFloat(value.(float64))
+				default:
+					panic("This should never happen. A non-float has been detected as an float by 'reflect'")
 				}
 			case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
 				switch value.(type) {
