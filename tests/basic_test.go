@@ -36,19 +36,23 @@ func connectMongo(c *C) *mgo.Session {
 	return session
 }
 
-func resetDB(c *C) error {
+func resetDB(c *C) {
 	session := connectMongo(c)
+	defer session.Close()
 	err := session.DB("gofigure").C("default").DropCollection()
 	if err != nil {
-		return err
+		c.Fatalf("Error dropping collection: %s", err.Error())
 	}
 	err = session.DB("gofigure").C("default").Create(&mgo.CollectionInfo{})
-	return err
+	if err != nil {
+		c.Fatalf("Error creating collection: %s", err.Error())
+	}
 }
 
 func (s *BasicS) TestMongoConfig(c *C) {
 	resetDB(c)
 	session := connectMongo(c)
+	defer session.Close()
 	coll := session.DB("gofigure").C("default")
 
 	err := coll.Insert(bson.M{
@@ -59,11 +63,15 @@ func (s *BasicS) TestMongoConfig(c *C) {
 	if err != nil {
 		c.Errorf("Failed to insert basic config. %s", err.Error())
 	}
-	var i interface{}
-	err = coll.Find(new(interface{})).One(&i)
+	var i map[string]interface{}
+	err = coll.Find(bson.M{}).One(&i)
 	if err != nil {
 		c.Errorf("Failed to query. %s", err.Error())
 	}
+	c.Log("Got back: ", i)
+	c.Check(i["Port"], Equals, 1234)
+	c.Check(i["Env"], Equals, "test")
+	c.Check(i["Debug"], Equals, true)
 
 	gofigure.MongoHosts = testMongoHost
 

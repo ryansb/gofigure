@@ -13,18 +13,13 @@ func Process(collection string, spec interface{}) error {
 	c, connCloser := mongoConnect(collection)
 	defer connCloser()
 
-	fmt.Println(spec)
-	f := new(map[string]interface{})
-	err := c.Find(bson.M{}).One(spec)
-	fmt.Println(f)
+	res := map[string]interface{}{}
+	err := c.Find(bson.M{}).One(&res)
+	fmt.Println(res)
 
-	mergeMapAndStruct(*f, spec)
+	mergeMapAndStruct(res, spec)
 
-	if err != nil {
-		fmt.Println(spec)
-		return err
-	}
-	return nil
+	return err
 }
 
 func mongoConnect(collectionName string) (*mgo.Collection, func()) {
