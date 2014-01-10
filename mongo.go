@@ -27,10 +27,6 @@ func Process(collection string, spec interface{}) error {
 	return nil
 }
 
-func MC(cname string) (*mgo.Collection, func()) {
-	return mongoConnect(cname)
-}
-
 func mongoConnect(collectionName string) (*mgo.Collection, func()) {
 	session, err := mgo.Dial(MongoHosts)
 	if err != nil {
