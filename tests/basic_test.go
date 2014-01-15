@@ -41,7 +41,7 @@ func resetDB(c *C) {
 	session := connectMongo(c)
 	defer session.Close()
 	err := session.DB("gofigure").C("default").DropCollection()
-	if err != nil {
+	if err != nil && err.Error() != "ns not found" {
 		c.Fatalf("Error dropping collection: %s", err.Error())
 	}
 	err = session.DB("gofigure").C("default").Create(&mgo.CollectionInfo{})
