@@ -3,6 +3,7 @@ package gofigure
 // MIT Licensed (see README.md)- Copyright (c) 2014 Ryan S. Brown <sb@ryansb.com>
 
 import (
+	"github.com/ryansb/gofigure/conf"
 	. "launchpad.net/gocheck"
 	"testing"
 )
@@ -23,8 +24,8 @@ type MyAppSpec struct {
 }
 
 func init() {
-	Settings.Option(MongoDBHosts("172.16.0.101"))
-	Settings.Option(FileLocations("sample/simple.json"))
+	conf.Settings.Option(conf.MongoDBHosts("172.16.0.101"))
+	conf.Settings.Option(conf.FileLocations("sample/simple.json"))
 }
 
 // TODO: make sure that config value heirarchy matches the spec
