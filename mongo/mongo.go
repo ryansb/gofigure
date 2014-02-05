@@ -1,33 +1,32 @@
-package gofigure
+package mongo
 
 import (
+	"github.com/ryansb/gofigure"
+	"github.com/ryansb/gofigure/merger"
 	"labix.org/v2/mgo"
 	"labix.org/v2/mgo/bson"
 )
 
-var MongoHosts = "localhost"
-var MongoDBName = "gofigure"
-
-func Process(collection string, spec interface{}) error {
-	c, connCloser := mongoConnect(collection)
+func Process(spec interface{}) error {
+	c, connCloser := mongoConnect(gofigure.Settings.MongoDBCollection)
 	defer connCloser()
 
 	res := map[string]interface{}{}
 	err := c.Find(bson.M{}).One(&res)
 
-	mergeMapAndStruct(res, spec)
+	merger.MapAndStruct(res, spec)
 
 	return err
 }
 
 func mongoConnect(collectionName string) (*mgo.Collection, func()) {
-	session, err := mgo.Dial(MongoHosts)
+	session, err := mgo.Dial(gofigure.Settings.MongoDBHosts)
 	if err != nil {
 		panic(err)
 	}
 
 	session.SetMode(mgo.Monotonic, true)
 
-	confCollection := session.DB(MongoDBName).C(collectionName)
+	confCollection := session.DB(gofigure.Settings.MongoDBName).C(collectionName)
 	return confCollection, session.Close
 }
