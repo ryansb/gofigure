@@ -1,5 +1,7 @@
 package mongo
 
+// MIT Licensed (see README.md)- Copyright (c) 2014 Ryan S. Brown <sb@ryansb.com>
+
 import (
 	"github.com/ryansb/gofigure"
 	"github.com/ryansb/gofigure/merger"

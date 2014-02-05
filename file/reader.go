@@ -1,5 +1,7 @@
 package file
 
+// MIT Licensed (see README.md)- Copyright (c) 2014 Ryan S. Brown <sb@ryansb.com>
+
 import (
 	"encoding/json"
 	"github.com/joeshaw/multierror"

@@ -1,5 +1,7 @@
 package merger
 
+// MIT Licensed (see README.md)- Copyright (c) 2014 Ryan S. Brown <sb@ryansb.com>
+
 import (
 	"fmt"
 	"reflect"

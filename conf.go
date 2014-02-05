@@ -1,5 +1,7 @@
 package gofigure
 
+// MIT Licensed (see README.md)- Copyright (c) 2014 Ryan S. Brown <sb@ryansb.com>
+
 // conf is actually how you configure gofigure through the magic of
 // self-referential functions. An implemention that is a shameless duplicate of
 // [post by Rob Pike][pike-blogpost]
