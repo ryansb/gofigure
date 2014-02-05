@@ -1,4 +1,4 @@
-package gofigure
+package conf
 
 // MIT Licensed (see README.md)- Copyright (c) 2014 Ryan S. Brown <sb@ryansb.com>
 
@@ -8,9 +8,9 @@ package gofigure
 //
 // Example:
 // figOpt := new(GoFigOpt)
-// figOpt.Option(gofigure.MongoHosts("localhost"))
+// figOpt.Option(conf.MongoHosts("localhost"))
 // // load a your local test configuration
-// prevMongos := figOpt.Option(gofigure.MongoHosts("p-mongo-1.go.com,p-mongo-2.go.com"))
+// prevMongos := figOpt.Option(conf.MongoHosts("p-mongo-1.go.com,p-mongo-2.go.com"))
 // // process a prod config for sillies
 // figOpt.Option(prevMongos) // now your mongo server will be set to "localhost" again
 //
@@ -20,6 +20,10 @@ var Settings GoFigOpt
 
 func init() {
 	Settings = GoFigOpt{
+		UseDB:             true,
+		UseFile:           true,
+		UseEnv:            true,
+		AppName:           "gofigure",
 		MongoDBHosts:      "localhost",
 		MongoDBName:       "gofigure",
 		MongoDBCollection: "default",
@@ -28,6 +32,10 @@ func init() {
 }
 
 type GoFigOpt struct {
+	UseDB             bool     // default true
+	UseFile           bool     // default true
+	UseEnv            bool     // default true
+	AppName           string   // default "gofigure"
 	MongoDBHosts      string   // default "localhost"
 	MongoDBName       string   // default "gofigure"
 	MongoDBCollection string   // default "default"
@@ -41,6 +49,14 @@ func (g *GoFigOpt) Option(opts ...option) (previous option) {
 		previous = opt(g)
 	}
 	return
+}
+
+func AppName(h string) option {
+	return func(g *GoFigOpt) option {
+		prev := g.AppName
+		g.AppName = h
+		return AppName(prev)
+	}
 }
 
 func MongoDBHosts(h string) option {
@@ -64,5 +80,29 @@ func FileLocations(h ...string) option {
 		prev := g.FileLocations
 		g.FileLocations = h
 		return FileLocations(prev...)
+	}
+}
+
+func UseDB(h bool) option {
+	return func(g *GoFigOpt) option {
+		prev := g.UseDB
+		g.UseDB = h
+		return UseDB(prev)
+	}
+}
+
+func UseFile(h bool) option {
+	return func(g *GoFigOpt) option {
+		prev := g.UseFile
+		g.UseFile = h
+		return UseFile(prev)
+	}
+}
+
+func UseEnv(h bool) option {
+	return func(g *GoFigOpt) option {
+		prev := g.UseEnv
+		g.UseEnv = h
+		return UseEnv(prev)
 	}
 }

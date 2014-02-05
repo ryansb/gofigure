@@ -5,7 +5,7 @@ package file
 import (
 	"encoding/json"
 	"github.com/joeshaw/multierror"
-	"github.com/ryansb/gofigure"
+	"github.com/ryansb/gofigure/conf"
 	"github.com/ryansb/gofigure/merger"
 	"io/ioutil"
 )
@@ -20,7 +20,7 @@ import (
 func Process(spec interface{}) error {
 	var el multierror.Errors
 	res := map[string]interface{}{}
-	for _, fname := range gofigure.Settings.FileLocations {
+	for _, fname := range conf.Settings.FileLocations {
 		contents, err := ioutil.ReadFile(fname)
 		if err != nil {
 			el = append(el, err)
