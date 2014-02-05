@@ -1,0 +1,6 @@
+{
+    "Env": "test",
+    "Port": 1234,
+    "AlarmLoadPct": 0.9,
+    "Debug": true
+}

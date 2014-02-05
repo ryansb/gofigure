@@ -1,7 +1,6 @@
-package gofigure_test
+package gofigure
 
 import (
-	"github.com/ryansb/gofigure"
 	"labix.org/v2/mgo"
 	"labix.org/v2/mgo/bson"
 	. "launchpad.net/gocheck"
@@ -76,14 +75,14 @@ func setupMongoTest(c *C) {
 	c.Check(i["Debug"], Equals, true)
 	c.Check(i["AlarmLoadPct"], Equals, 0.9)
 
-	gofigure.MongoHosts = testMongoHost
+	MongoHosts = testMongoHost
 }
 
 func (s *BasicS) TestMongoString(c *C) {
 	setupMongoTest(c)
 
 	conf := MyAppSpec{}
-	err := gofigure.Process("default", &conf)
+	err := Process("default", &conf)
 	c.Check(err, Equals, nil)
 	c.Check(conf.Env, Equals, "test")
 }
@@ -92,7 +91,7 @@ func (s *BasicS) TestMongoBool(c *C) {
 	setupMongoTest(c)
 
 	conf := MyAppSpec{}
-	err := gofigure.Process("default", &conf)
+	err := Process("default", &conf)
 	c.Check(err, Equals, nil)
 	c.Check(conf.Debug, Equals, true)
 }
@@ -101,7 +100,7 @@ func (s *BasicS) TestMongoFloat(c *C) {
 	setupMongoTest(c)
 
 	conf := MyAppSpec{}
-	err := gofigure.Process("default", &conf)
+	err := Process("default", &conf)
 	c.Check(err, Equals, nil)
 	c.Check(conf.AlarmLoadPct, Equals, float32(0.9))
 }
@@ -110,7 +109,7 @@ func (s *BasicS) TestMongoInt(c *C) {
 	setupMongoTest(c)
 
 	conf := MyAppSpec{}
-	err := gofigure.Process("default", &conf)
+	err := Process("default", &conf)
 	c.Check(err, Equals, nil)
 	c.Check(conf.Port, Equals, 1234)
 }
