@@ -1,11 +1,11 @@
-package gofigure
+package merger
 
 import (
 	"fmt"
 	"reflect"
 )
 
-func mergeMapAndStruct(theMap map[string]interface{}, spec interface{}) error {
+func MapAndStruct(theMap map[string]interface{}, spec interface{}) error {
 	s := reflect.ValueOf(spec).Elem()
 	if s.Kind() != reflect.Struct {
 		return fmt.Errorf("Invalid spec! Needs to be a struct.")
@@ -44,8 +44,15 @@ func mergeMapAndStruct(theMap map[string]interface{}, spec interface{}) error {
 					f.SetInt(int64(value.(int32)))
 				case int64:
 					f.SetInt(value.(int64))
+				case float32:
+					f.SetInt(int64(value.(float32)))
+				case float64:
+					f.SetInt(int64(value.(float64)))
 				default:
-					panic("This should never happen. A non-int has been detected as an int by 'reflect'")
+					panic(fmt.Sprintf("This should never happen. A non-int "+
+						"has been detected as an int by 'reflect', "+
+						"type=%v, kind=%v, val=%v",
+						reflect.TypeOf(value), f.Kind(), value))
 				}
 			}
 		}
