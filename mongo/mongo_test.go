@@ -3,7 +3,7 @@ package mongo
 // MIT Licensed (see README.md)- Copyright (c) 2014 Ryan S. Brown <sb@ryansb.com>
 
 import (
-	"github.com/ryansb/gofigure"
+	"github.com/ryansb/gofigure/conf"
 	"labix.org/v2/mgo"
 	"labix.org/v2/mgo/bson"
 	. "launchpad.net/gocheck"
@@ -78,7 +78,7 @@ func setupMongoTest(c *C) {
 	c.Check(i["Debug"], Equals, true)
 	c.Check(i["AlarmLoadPct"], Equals, 0.9)
 
-	gofigure.Settings.Option(gofigure.MongoDBHosts(testMongoHost))
+	conf.Settings.Option(conf.MongoDBHosts(testMongoHost))
 }
 
 func (s *BasicS) TestMongoString(c *C) {

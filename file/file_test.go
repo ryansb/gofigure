@@ -3,7 +3,7 @@ package file
 // MIT Licensed (see README.md)- Copyright (c) 2014 Ryan S. Brown <sb@ryansb.com>
 
 import (
-	"github.com/ryansb/gofigure"
+	"github.com/ryansb/gofigure/conf"
 	. "launchpad.net/gocheck"
 	"testing"
 )
@@ -24,7 +24,7 @@ type MyAppSpec struct {
 }
 
 func init() {
-	gofigure.Settings.Option(gofigure.FileLocations("sample/simple.json"))
+	conf.Settings.Option(conf.FileLocations("sample/simple.json"))
 }
 
 func (s *BasicS) TestFileString(c *C) {
